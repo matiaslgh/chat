@@ -2,8 +2,9 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "Chat backend",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
+    "dev": "nodemon app.js",
     "test": "jest --coverage"
   },
   "author": "Matias Luraghi",
