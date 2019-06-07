@@ -37,3 +37,14 @@ Note: If previously you have run the project in development mode, you will need 
 
 ## Notes
 The .env files were uploaded to this repo to simplify the process of showing/running this project. In a real world project they must be in .gitignore and provide an example.env instead
+
+## Backend
+
+### Logging
+I use [pino](http://getpino.io/#/) for logging
+
+For production only, I use [express-pino-logger](https://www.npmjs.com/package/express-pino-logger) as a middleware to log the requests and [pino-arborsculpture](https://www.npmjs.com/package/pino-arborsculpture) to be able to modify the log level on runtime by editing the file `./backend/logLevel.json`
+
+For development only, I use [pino-pretty](https://www.npmjs.com/package/pino-pretty) and a custom middleware to log the requests.
+
+This difference is because during development I don't care about a super verbose logging, instead it's better a concise and pretty message. For production we don't need a human-readable logging, since we would use a different tool to analyze/visualize them, e.g. kibana

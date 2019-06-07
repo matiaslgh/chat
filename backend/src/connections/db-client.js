@@ -1,15 +1,17 @@
 const { Client } = require('pg');
 const sleep = require('util').promisify(setTimeout);
+const { db } = require('../env');
+const log = require('../logger');
 
 let dbClient;
 
 const createClient = () => {
   return new Client({
-    user: process.env.POSTGRES_USER,
     host: 'postgres',
-    database: process.env.POSTGRES_DB,
-    password: process.env.POSTGRES_PASSWORD,
-    port: process.env.POSTGRES_PORT,
+    user: db.user,
+    password: db.password,
+    database: db.name,
+    port: db.port,
   });
 };
 
@@ -23,16 +25,17 @@ const connectDb = async (retries = 10) => {
     try {
       const client = createClient();
       await client.connect();
-      console.log('Connected to database successfully');
+      log.info('Connected to database successfully');
       dbClient = client;
       break;
     } catch (err) {
       retries -= 1;
-      console.log(`Failed to connect to db. Retries left: ${retries}`);
+      log.warn(`Failed to connect to db. Retries left: ${retries}`);
 
       if (retries) {
         await sleep(5000);
       } else {
+        log.error(`Couldn't connect to db: ${err}`);
         throw err;
       }
     }
