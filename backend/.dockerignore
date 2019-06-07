@@ -1,0 +1,6 @@
+__tests__
+node_modules
+.eslintrc.yml
+.prettierrc.yml
+Dockerfile
+npm-debug.log
