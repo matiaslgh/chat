@@ -1,14 +1,17 @@
 version: "3"
 services:
   backend:
-    container_name: backend-dev
+    container_name: chat-lgh-backend-dev
     build:
       context: ./backend
       dockerfile: Dockerfile-dev
     volumes:
       - backend-sync:/app:nocopy
-    environment:
-      - NODE_ENV=development
+    env_file:
+     - ./backend/src/env/development.env
+  postgres:
+    env_file:
+     - ./backend/src/env/development.env
 volumes:
   backend-sync:
     external: true

@@ -34,3 +34,6 @@ docker-compose up
 This will bring all the needed Docker containers up.
 
 Note: If previously you have run the project in development mode, you will need to run `docker-compose up --build` instead, to rebuild the docker images and get the production container.
+
+## Notes
+The .env files were uploaded to this repo to simplify the process of showing/running this project. In a real world project they must be in .gitignore and provide an example.env instead

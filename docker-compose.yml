@@ -2,9 +2,18 @@ version: "3"
 services:
   backend:
     build: ./backend
-    container_name: backend-prod
+    container_name: chat-lgh-backend-prod
+    depends_on:
+      - postgres
     ports:
       - 3000:3000
-    environment:
-      - PORT=3000
-      - NODE_ENV=production
+    env_file:
+     - ./backend/src/env/production.env
+  postgres:
+    build: ./postgres
+    env_file:
+     - ./backend/src/env/production.env
+    volumes:
+      - ./postgres/pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
