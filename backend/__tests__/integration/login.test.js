@@ -1,4 +1,5 @@
 const request = require('supertest');
+const jwt = require('jsonwebtoken');
 
 jest.mock('../../src/logger', () => require('../../__mocks__/logger'));
 jest.mock('../../src/middlewares/loggerMw', () => (req, res, next) => next());
@@ -6,6 +7,7 @@ jest.mock('../../src/connections/db-client');
 jest.mock('../../src/env', () => ({
   jwtSecret: 'just-a-secret',
 }));
+jest.unmock('jsonwebtoken');
 
 const src = '../../src';
 
@@ -32,10 +34,8 @@ describe('POST /login', () => {
       })
       .then(res => {
         expect(res.statusCode).toBe(200);
-        expect(res.body).toEqual({
-          id: 1,
-          token: 'HARD_CODED_VALID_TOKEN',
-        });
+        const idInToken = jwt.verify(res.body.token, 'just-a-secret').id;
+        expect(res.body.id).toEqual(idInToken);
         done();
       });
   });
