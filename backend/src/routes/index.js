@@ -3,5 +3,6 @@ const requiredAuth = require('../middlewares/authMw');
 
 router.use('/login', require('./loginRouter'));
 router.use('/messages', requiredAuth, require('./messagesRouter'));
+router.use('/users', require('./usersRouter'));
 
 module.exports = router;
