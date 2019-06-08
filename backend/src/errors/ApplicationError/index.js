@@ -2,16 +2,16 @@
  * Custom error to simplify the logging and http responding
  */
 class ApplicationError extends Error {
-  constructor(privateMessage, publicMessage, status = 500, logLevel = 'error') {
+  constructor(logMsg, responseMsg, status = 500, logLevel = 'error') {
     super();
 
     Error.captureStackTrace(this, this.constructor);
 
     this.name = this.constructor.name;
 
-    this.privateMessage = `${this.name}: ${privateMessage || 'Something went wrong'}`;
+    this.logMsg = `${this.name}: ${logMsg || 'Something went wrong'}`;
 
-    this.publicMessage = publicMessage || 'Something went wrong';
+    this.responseMsg = responseMsg || 'Something went wrong';
 
     this.status = status;
 

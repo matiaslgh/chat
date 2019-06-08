@@ -1,5 +1,6 @@
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
+const { AuthError } = require('../../src/errors');
 
 jest.mock('../../src/logger', () => require('../../__mocks__/logger'));
 jest.mock('../../src/middlewares/loggerMw', () => (req, res, next) => next());
@@ -43,7 +44,7 @@ describe('POST /login', () => {
   it('responds 401 with error message when the username does not exist', done => {
     jest.setMock(`${src}/models/usersModel`, {
       getPassAndIdFromUsername: () => {
-        throw new Error('User does not exist');
+        throw new AuthError('User does not exist');
       },
     });
 

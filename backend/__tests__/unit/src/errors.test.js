@@ -15,17 +15,18 @@ describe('Errors', () => {
 
     it('logs and responds with the provided data when the error is custom', done => {
       const { handleCustomError } = require(`${src}/errors`);
+
       const log = require(`${src}/logger`);
 
       const username = 'USERNAME';
       const error = new UsernameAlreadyTakenError(username);
-      const { status, privateMessage, publicMessage, logLevel } = error;
+      const { status, logMsg, responseMsg, logLevel } = error;
 
       const response = resWithStatusAndJson(status, res => {
         expect(res).toEqual({
-          message: publicMessage,
+          message: responseMsg,
         });
-        expect(log[logLevel]).toHaveBeenCalledWith(privateMessage);
+        expect(log[logLevel]).toHaveBeenCalledWith(logMsg);
         done();
       });
 

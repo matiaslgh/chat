@@ -1,3 +1,5 @@
+const { AuthError } = require('../errors');
+
 async function getPassAndIdFromUsername(username) {
   // TODO: Check if user was passed
   // TODO: Check if the user is already logged in
@@ -8,7 +10,7 @@ async function getPassAndIdFromUsername(username) {
       id: 123,
     };
   }
-  throw new Error('User does not exist');
+  throw new AuthError('User does not exist');
 }
 
 module.exports = {

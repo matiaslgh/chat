@@ -8,9 +8,9 @@ const log = require('../logger');
  */
 function handleCustomError({ error, response, defaultLogMsg, defaultResponseMsg }) {
   if (error.customError) {
-    log[error.logLevel](error.privateMessage);
+    log[error.logLevel](error.logMsg);
     response.status(error.status).json({
-      message: error.publicMessage,
+      message: error.responseMsg,
     });
   } else {
     log.error(defaultLogMsg);
@@ -22,6 +22,7 @@ function handleCustomError({ error, response, defaultLogMsg, defaultResponseMsg 
 
 module.exports = {
   ApplicationError: require('./ApplicationError'),
+  AuthError: require('./ApplicationError/AuthError'),
   UsernameAlreadyTakenError: require('./ApplicationError/UsernameAlreadyTakenError'),
   handleCustomError,
 };
