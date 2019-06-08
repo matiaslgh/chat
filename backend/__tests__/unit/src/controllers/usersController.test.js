@@ -1,7 +1,7 @@
 const { resWithStatusAndJson } = require('../../../testUtils');
-const { UsernameAlreadyTakenError } = require('../../../../src/errors');
 
 jest.mock('../../../../src/logger', () => require('../../../../__mocks__/logger'));
+jest.mock('../../../../src/errors');
 
 const src = '../../../../src';
 
@@ -35,38 +35,31 @@ describe('Users controller', () => {
       createUser(req, res);
     });
 
-    it('Responds 409 with { message } when username already exists', done => {
-      jest.setMock(`${src}/models/usersModel`, {
-        createUser: username => {
-          throw new UsernameAlreadyTakenError(username);
-        },
-      });
-      const { createUser } = require(`${src}/controllers/usersController`);
-
-      const res = resWithStatusAndJson(409, response => {
-        expect(response).toEqual({
-          message: `Cannot create user ${req.body.username} because it already exists`,
-        });
-        done();
-      });
-      createUser(req, res);
-    });
-
-    it('Responds 500 with { message } when there is an unknown error', done => {
+    it('Handles errors with handleCustomError', async done => {
       jest.setMock(`${src}/models/usersModel`, {
         createUser: () => {
-          throw new Error('Your app has exploded!');
+          throw new Error('There was an error');
         },
       });
       const { createUser } = require(`${src}/controllers/usersController`);
+      const { handleCustomError } = require(`${src}/errors`);
 
-      const res = resWithStatusAndJson(500, response => {
-        expect(response).toEqual({
-          message: 'Internal Server Error: Could not create user',
-        });
-        done();
-      });
-      createUser(req, res);
+      const res = 'fake response';
+      await createUser(req, res);
+
+      const {
+        error,
+        response,
+        defaultLogMsg,
+        defaultResponseMsg,
+      } = handleCustomError.mock.calls[0][0];
+
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toEqual('There was an error');
+      expect(response).toEqual(res);
+      expect(defaultLogMsg).toEqual(`Error trying to create user ${req.body.username}: ${error}`);
+      expect(defaultResponseMsg).toEqual('Internal Server Error: Could not create user');
+      done();
     });
   });
 });
