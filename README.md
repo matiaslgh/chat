@@ -40,6 +40,27 @@ The .env files were uploaded to this repo to simplify the process of showing/run
 
 ## Backend
 
+### Run tests
+In the backend:
+```shell
+cd backend
+```
+
+Run unit tests
+```shell
+npm run test:unit
+```
+
+Run integration tests
+```shell
+npm run test:integration
+```
+
+Run all the tests
+```shell
+npm test
+```
+
 ### Logging
 I use [pino](http://getpino.io/#/) for logging
 

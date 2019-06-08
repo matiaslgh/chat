@@ -13,7 +13,7 @@ describe('Login controller', () => {
     jest.resetModules();
   });
   describe('login', () => {
-    it('Responds 200 with { token, id } on valid credentials', () => {
+    it('Responds 200 with { token, id } on valid credentials', done => {
       jest.setMock(`${src}/models/usersModel`, {
         getPassAndIdFromUsername: () => ({
           id: 1,
@@ -34,11 +34,12 @@ describe('Login controller', () => {
           id: 1,
           token: 'HARD_CODED_VALID_TOKEN', // Matches with the mocked value
         });
+        done();
       });
       login(req, res);
     });
 
-    it('Responds 401 when the username does not exist', () => {
+    it('Responds 401 when the username does not exist', done => {
       jest.setMock(`${src}/models/usersModel`, {
         getPassAndIdFromUsername: () => {
           throw new Error('User does not exist');
@@ -55,11 +56,12 @@ describe('Login controller', () => {
 
       const res = resWithStatusAndJson(401, ({ message }) => {
         expect(message).toBeString();
+        done();
       });
       login(req, res);
     });
 
-    it('Responds 401 when the password is not valid', () => {
+    it('Responds 401 when the password is not valid', done => {
       jest.setMock(`${src}/models/usersModel`, {
         getPassAndIdFromUsername: () => ({
           id: 1,
@@ -77,6 +79,7 @@ describe('Login controller', () => {
 
       const res = resWithStatusAndJson(401, ({ message }) => {
         expect(message).toBeString();
+        done();
       });
       login(req, res);
     });

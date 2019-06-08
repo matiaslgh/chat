@@ -18,3 +18,5 @@ app.use('/', routes);
     log.info(`Server listening on port: ${port}`);
   });
 })();
+
+module.exports = app;
