@@ -7,4 +7,5 @@ module.exports = {
     name: process.env.POSTGRES_DB,
     port: process.env.POSTGRES_PORT,
   },
+  jwtSecret: process.env.JWT_SECRET,
 };
