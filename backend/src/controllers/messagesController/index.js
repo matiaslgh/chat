@@ -12,13 +12,13 @@ async function createMessage(req, res) {
 
   try {
     // TODO: content could be undefined
-    const type = getTypeFromString(content.type);
-    const { text, metadata } = content;
-    const { id, timestamp } = await model.createMessage(sender, recipient, type, text);
+    const { type, text, ...metadata } = content;
+    const typeInt = getTypeFromString(type);
+    const { id, timestamp } = await model.createMessage(sender, recipient, typeInt, text);
 
     // TODO: Validate metadata format
     // TODO: Create whitelist for valid metadata
-    if (metadata && type !== TEXT) {
+    if (metadata && typeInt !== TEXT) {
       await model.createMetadata(id, metadata);
     }
 
