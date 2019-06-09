@@ -1,5 +1,6 @@
+const { UNIQUE_VIOLATION } = require('pg-error-constants');
 const { getClient } = require('../connections/db-client');
-const { AuthError } = require('../errors');
+const { AuthError, UsernameAlreadyTakenError } = require('../errors');
 
 const table = 'users';
 
@@ -17,14 +18,22 @@ async function getPassAndIdFromUsername(username) {
 }
 
 async function createUser(username, password) {
-  const { rows } = await getClient().query(
-    ` INSERT INTO ${table} (username, password, created_at, last_connection)
+  try {
+    const { rows } = await getClient().query(
+      ` INSERT INTO ${table} (username, password, created_at, last_connection)
         VALUES ($1, $2, NOW(), NOW())
         RETURNING id`,
-    [username, password]
-  );
-
-  return rows[0].id;
+      [username, password]
+    );
+    return rows[0].id;
+  } catch (e) {
+    switch (e.code) {
+      case UNIQUE_VIOLATION:
+        throw new UsernameAlreadyTakenError(username);
+      default:
+        throw e;
+    }
+  }
 }
 
 module.exports = {
