@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { OK } = require('http-status-codes');
 const { jwtSecret } = require('../env');
 const { getPassAndIdFromUsername } = require('../models/usersModel');
 const log = require('../logger');
@@ -8,6 +9,8 @@ const { handleCustomError, AuthError } = require('../errors');
 async function login(req, res) {
   const { username, password } = req.body;
   // TODO: Handle limit of tries
+  // TODO: Validate username (min/max length, not null, etc)
+  // TODO: Validate password requirements (length, not null, must contain X char, etc)
 
   try {
     // TODO: Check if the user is already logged in
@@ -26,7 +29,7 @@ async function login(req, res) {
     const token = jwt.sign({ id }, jwtSecret, options);
 
     log.trace(`User with id=${id} was successfully logged in`);
-    res.status(200).json({
+    res.status(OK).json({
       id,
       token,
     });
