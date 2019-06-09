@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { createMessage } = require('../controllers/messagesController');
 
 router.get('/', (req, res) => {
   return res.json({
@@ -16,5 +17,7 @@ router.get('/', (req, res) => {
     ],
   });
 });
+
+router.post('/', createMessage);
 
 module.exports = router;
