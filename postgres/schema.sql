@@ -5,7 +5,3 @@ CREATE TABLE users(
   created_at TIMESTAMP NOT NULL,
   last_connection TIMESTAMP NOT NULL
 );
-
-CREATE TABLE test(
-  id BIGSERIAL PRIMARY KEY
-);
