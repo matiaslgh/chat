@@ -20,9 +20,7 @@ describe('Users controller', () => {
 
     it('Responds 201 with { id } when creates the user', done => {
       jest.setMock(`${src}/models/usersModel`, {
-        createUser: () => ({
-          id: 123,
-        }),
+        createUser: () => 123,
       });
       const { createUser } = require(`${src}/controllers/usersController`);
 

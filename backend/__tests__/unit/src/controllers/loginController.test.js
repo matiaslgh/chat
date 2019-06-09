@@ -17,17 +17,21 @@ describe('Login controller', () => {
     const req = {
       body: {
         username: 'username',
-        password: 'password',
+        password: 'valid-password',
       },
     };
 
-    it('Responds 200 with { token, id } on valid credentials', done => {
+    const mockGetPassAndIdFromUsernameWithNoError = () => {
       jest.setMock(`${src}/models/usersModel`, {
         getPassAndIdFromUsername: () => ({
           id: 1,
-          password: 'password',
+          password: '$2a$10$Xj.4tbIL8hautFE4WNEo7./jeqfPSnYvJbYOS.OLiF1nvsZppGiIS',
         }),
       });
+    };
+
+    it('Responds 200 with { token, id } on valid credentials', done => {
+      mockGetPassAndIdFromUsernameWithNoError();
       const { login } = require(`${src}/controllers/loginController`);
 
       const res = resWithStatusAndJson(200, response => {
@@ -41,12 +45,7 @@ describe('Login controller', () => {
     });
 
     it('Calls handleCustomError if password is not correct', async done => {
-      jest.setMock(`${src}/models/usersModel`, {
-        getPassAndIdFromUsername: () => ({
-          id: 1,
-          password: 'password',
-        }),
-      });
+      mockGetPassAndIdFromUsernameWithNoError();
 
       const { login } = require(`${src}/controllers/loginController`);
       const { handleCustomError, AuthError } = require(`${src}/errors`);

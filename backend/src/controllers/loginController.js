@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const { jwtSecret } = require('../env');
 const { getPassAndIdFromUsername } = require('../models/usersModel');
 const log = require('../logger');
@@ -6,26 +7,29 @@ const { handleCustomError, AuthError } = require('../errors');
 
 async function login(req, res) {
   const { username, password } = req.body;
+  // TODO: Handle limit of tries
 
   try {
-    const { id, password: actualPassword } = await getPassAndIdFromUsername(username);
+    // TODO: Check if the user is already logged in
 
-    if (actualPassword === password) {
-      const options = {
-        expiresIn: '24h',
-      };
-      const token = jwt.sign({ id }, jwtSecret, options);
+    const { id, password: hashedPassword } = await getPassAndIdFromUsername(username);
 
-      log.trace(`User with id=${id} was successfully logged in`);
-      return res.status(200).json({
-        id,
-        token,
-      });
+    const samePassword = await bcrypt.compare(password, hashedPassword);
+
+    if (!samePassword) {
+      throw new AuthError(`User with id=${id} wrote a wrong password`);
     }
 
-    // TODO: Handle limit of tries
+    const options = {
+      expiresIn: '24h',
+    };
+    const token = jwt.sign({ id }, jwtSecret, options);
 
-    throw new AuthError(`User with id=${id} wrote a wrong password`);
+    log.trace(`User with id=${id} was successfully logged in`);
+    res.status(200).json({
+      id,
+      token,
+    });
   } catch (e) {
     handleCustomError({
       error: e,

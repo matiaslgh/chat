@@ -17,13 +17,17 @@ describe('POST /login', () => {
     jest.resetModules();
   });
 
-  it('responds 200 with id and token when credentials are valid', done => {
+  const mockGetPassAndIdFromUsernameWithNoError = () => {
     jest.setMock(`${src}/models/usersModel`, {
       getPassAndIdFromUsername: () => ({
         id: 1,
-        password: 'valid-password',
+        password: '$2a$10$Xj.4tbIL8hautFE4WNEo7./jeqfPSnYvJbYOS.OLiF1nvsZppGiIS',
       }),
     });
+  };
+
+  it('responds 200 with id and token when credentials are valid', done => {
+    mockGetPassAndIdFromUsernameWithNoError();
 
     const app = require(`${src}/app`);
 
@@ -64,12 +68,7 @@ describe('POST /login', () => {
   });
 
   it('responds 401 with error message when the password is not valid', done => {
-    jest.setMock(`${src}/models/usersModel`, {
-      getPassAndIdFromUsername: () => ({
-        id: 1,
-        password: 'valid-password',
-      }),
-    });
+    mockGetPassAndIdFromUsernameWithNoError();
 
     const app = require(`${src}/app`);
 
