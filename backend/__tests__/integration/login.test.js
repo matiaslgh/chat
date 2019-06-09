@@ -1,14 +1,14 @@
 const request = require('supertest');
-const jwt = require('jsonwebtoken');
-const { AuthError } = require('../../src/errors');
+const { mocksForIntegration } = require('../testUtils');
 
-jest.mock('../../src/logger', () => require('../../__mocks__/logger'));
-jest.mock('../../src/middlewares/loggerMw', () => (req, res, next) => next());
-jest.mock('../../src/connections/db-client');
-jest.mock('../../src/env', () => ({
-  jwtSecret: 'just-a-secret',
-}));
-jest.unmock('jsonwebtoken');
+let jwtSecret;
+let validPassword;
+
+beforeAll(() => {
+  const { env, validPassword: pass } = mocksForIntegration();
+  jwtSecret = env.jwtSecret;
+  validPassword = pass;
+});
 
 const src = '../../src';
 
@@ -17,35 +17,26 @@ describe('POST /login', () => {
     jest.resetModules();
   });
 
-  const mockGetPassAndIdFromUsernameWithNoError = () => {
-    jest.setMock(`${src}/models/usersModel`, {
-      getPassAndIdFromUsername: () => ({
-        id: 1,
-        password: '$2a$10$Xj.4tbIL8hautFE4WNEo7./jeqfPSnYvJbYOS.OLiF1nvsZppGiIS',
-      }),
-    });
-  };
-
   it('responds 200 with id and token when credentials are valid', done => {
-    mockGetPassAndIdFromUsernameWithNoError();
-
     const app = require(`${src}/app`);
+    const jwt = require('jsonwebtoken');
 
     return request(app)
       .post('/login')
       .send({
         username: 'username',
-        password: 'valid-password',
+        password: validPassword,
       })
       .then(res => {
         expect(res.statusCode).toBe(200);
-        const idInToken = jwt.verify(res.body.token, 'just-a-secret').id;
+        const idInToken = jwt.verify(res.body.token, jwtSecret).id;
         expect(res.body.id).toEqual(idInToken);
         done();
       });
   });
 
   it('responds 401 with error message when the username does not exist', done => {
+    const { AuthError } = require(`${src}/errors`);
     jest.setMock(`${src}/models/usersModel`, {
       getPassAndIdFromUsername: () => {
         throw new AuthError('User does not exist');
@@ -58,7 +49,7 @@ describe('POST /login', () => {
       .post('/login')
       .send({
         username: 'non-existing-username',
-        password: 'valid-password',
+        password: validPassword,
       })
       .then(res => {
         expect(res.statusCode).toBe(401);
@@ -68,8 +59,6 @@ describe('POST /login', () => {
   });
 
   it('responds 401 with error message when the password is not valid', done => {
-    mockGetPassAndIdFromUsernameWithNoError();
-
     const app = require(`${src}/app`);
 
     return request(app)

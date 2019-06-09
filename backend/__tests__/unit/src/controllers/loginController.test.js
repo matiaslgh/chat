@@ -1,11 +1,15 @@
-const { resWithStatusAndJson } = require('../../../testUtils');
+const {
+  resWithStatusAndJson,
+  mockEnvAndReturnValues,
+  mockGetPassAndIdFromUsernameWithNoError,
+} = require('../../../testUtils');
 
 jest.mock('../../../../src/logger', () => require('../../../../__mocks__/logger'));
 jest.mock('jsonwebtoken');
-jest.mock('../../../../src/env', () => ({
-  jwtSecret: 'just-a-secret',
-}));
 jest.mock('../../../../src/errors');
+mockEnvAndReturnValues();
+
+const validPassword = mockGetPassAndIdFromUsernameWithNoError();
 
 const src = '../../../../src';
 
@@ -17,17 +21,8 @@ describe('Login controller', () => {
     const req = {
       body: {
         username: 'username',
-        password: 'valid-password',
+        password: validPassword,
       },
-    };
-
-    const mockGetPassAndIdFromUsernameWithNoError = () => {
-      jest.setMock(`${src}/models/usersModel`, {
-        getPassAndIdFromUsername: () => ({
-          id: 1,
-          password: '$2a$10$Xj.4tbIL8hautFE4WNEo7./jeqfPSnYvJbYOS.OLiF1nvsZppGiIS',
-        }),
-      });
     };
 
     it('Responds 200 with { token, id } on valid credentials', done => {
