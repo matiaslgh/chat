@@ -7,7 +7,7 @@ async function createUser(req, res) {
   const { username, password } = req.body;
 
   try {
-    const { id } = await model.createUser(username, password);
+    const id = await model.createUser(username, password);
 
     log.trace(`User ${id} has been successfully created`);
     return res.status(CREATED).json({
