@@ -5,15 +5,22 @@ const { jwtSecret } = require('../env');
 const { getPassAndIdFromUsername } = require('../models/usersModel');
 const log = require('../logger');
 const { handleCustomError, AuthError } = require('../errors');
+const { validate } = require('../utils/validator');
 
 async function login(req, res) {
   const { username, password } = req.body;
   // TODO: Handle limit of tries
-  // TODO: Validate username (min/max length, not null, etc)
-  // TODO: Validate password requirements (length, not null, must contain X char, etc)
 
   try {
     // TODO: Check if the user is already logged in
+
+    validate(
+      { username, password },
+      {
+        username: ['required', 'string'],
+        password: ['required', 'string'],
+      }
+    );
 
     const { id, password: hashedPassword } = await getPassAndIdFromUsername(username);
 
