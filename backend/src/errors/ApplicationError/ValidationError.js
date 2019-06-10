@@ -16,7 +16,7 @@ class ValidationError extends ApplicationError {
         message = `Field ${key} is required`;
         break;
       case STRING:
-        message = `Field ${key} must be an object`;
+        message = `Field ${key} must be a string`;
         break;
       default:
         message = 'The provided data is wrong';
