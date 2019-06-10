@@ -25,5 +25,6 @@ module.exports = {
   AuthError: require('./ApplicationError/AuthError'),
   ForbiddenError: require('./ApplicationError/ForbiddenError'),
   UsernameAlreadyTakenError: require('./ApplicationError/UsernameAlreadyTakenError'),
+  ValidationError: require('./ApplicationError/ValidationError'),
   handleCustomError,
 };
