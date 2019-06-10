@@ -6,12 +6,12 @@ services:
       context: ./backend
       dockerfile: Dockerfile-dev
     volumes:
-      - backend-sync:/app:nocopy
+      - chat-lgh-backend-sync:/app:nocopy
     env_file:
      - ./backend/src/env/development.env
   postgres:
     env_file:
      - ./backend/src/env/development.env
 volumes:
-  backend-sync:
+  chat-lgh-backend-sync:
     external: true

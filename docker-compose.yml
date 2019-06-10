@@ -14,6 +14,8 @@ services:
     env_file:
      - ./backend/src/env/production.env
     volumes:
-      - ./postgres/pgdata:/var/lib/postgresql/data
+      - chat-lgh-postgres-data:/var/lib/postgresql/data
     ports:
       - '5432:5432'
+volumes:
+  chat-lgh-postgres-data:
