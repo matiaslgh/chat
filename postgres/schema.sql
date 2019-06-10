@@ -6,12 +6,14 @@ CREATE TABLE users(
   last_connection TIMESTAMP NOT NULL
 );
 
+CREATE TYPE message_type AS ENUM ('text', 'image', 'video');
+
 CREATE TABLE messages(
   id BIGSERIAL PRIMARY KEY,
   sender BIGINT NOT NULL REFERENCES users(id),
   recipient BIGINT NOT NULL REFERENCES users(id),
   created_at TIMESTAMP NOT NULL,
-  type SMALLINT NOT NULL,
+  type message_type NOT NULL,
   text TEXT
 );
 
