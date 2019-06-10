@@ -1,14 +1,17 @@
 const { OK } = require('http-status-codes');
 const model = require('../../models/messagesModel');
 const log = require('../../logger');
-const { handleCustomError } = require('../../errors');
+const { handleCustomError, ForbiddenError } = require('../../errors');
 const { TEXT, getTypeFromString } = require('./messageTypes');
 
 async function createMessage(req, res) {
-  const { sender, recipient, content } = req.body;
-  // TODO: Validate sender === user logged
+  const { userId, body } = req;
+  const { sender, recipient, content } = body;
 
   try {
+    if (userId != sender) {
+      throw new ForbiddenError(`User ${userId} tried to send a message as user ${sender}`);
+    }
     // TODO: content could be undefined
     const { type, text, ...metadata } = content;
     const typeInt = getTypeFromString(type);

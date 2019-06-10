@@ -23,6 +23,7 @@ function handleCustomError({ error, response, defaultLogMsg, defaultResponseMsg 
 module.exports = {
   ApplicationError: require('./ApplicationError'),
   AuthError: require('./ApplicationError/AuthError'),
+  ForbiddenError: require('./ApplicationError/ForbiddenError'),
   UsernameAlreadyTakenError: require('./ApplicationError/UsernameAlreadyTakenError'),
   handleCustomError,
 };
