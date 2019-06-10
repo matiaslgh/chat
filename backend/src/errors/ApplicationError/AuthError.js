@@ -5,7 +5,7 @@ const defaultMsg = 'Auth Failed';
 
 class AuthError extends ApplicationError {
   constructor(logMsg) {
-    super(`AuthError: ${logMsg}`, defaultMsg, UNAUTHORIZED, 'trace');
+    super(logMsg, defaultMsg, UNAUTHORIZED, 'trace');
   }
 }
 
