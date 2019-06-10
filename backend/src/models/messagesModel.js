@@ -1,6 +1,6 @@
 const { getClient } = require('../connections/db-client');
 
-async function createMessage(sender, recipient, type, text) {
+async function createMessage(sender, recipient, type, text = null) {
   const { rows } = await getClient().query(
     ` INSERT INTO messages (sender, recipient, type, text, created_at)
       VALUES ($1, $2, $3, $4, NOW())
@@ -8,6 +8,7 @@ async function createMessage(sender, recipient, type, text) {
     [sender, recipient, type, text]
   );
   const { id, timestamp } = rows[0];
+  // TODO: throw custom error if sender/recipient doesn't exist
   return {
     id,
     timestamp,

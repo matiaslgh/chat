@@ -6,8 +6,6 @@ const { TEXT, getTypeFromString } = require('./messageTypes');
 
 async function createMessage(req, res) {
   const { sender, recipient, content } = req.body;
-  // TODO: Validate sender exists
-  // TODO: Validate recipient exists
   // TODO: Validate sender === user logged
 
   try {
