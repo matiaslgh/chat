@@ -15,8 +15,15 @@ const validateRequired = (obj, validations) => {
   return true;
 };
 
+const isInteger = value => {
+  if (typeof value === 'string') {
+    return /^\d+$/.test(value);
+  }
+  return Number.isInteger(value);
+};
+
 const validators = {
-  [validationNames.INTEGER]: value => Number.isInteger(value),
+  [validationNames.INTEGER]: isInteger,
   [validationNames.OBJECT]: value => typeof value === 'object',
   [validationNames.STRING]: value => typeof value === 'string',
   // TODO: create url validator
