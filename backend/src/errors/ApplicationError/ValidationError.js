@@ -2,7 +2,7 @@ const { BAD_REQUEST } = require('http-status-codes');
 const ApplicationError = require('./index');
 
 class ValidationError extends ApplicationError {
-  constructor(key, value, type) {
+  constructor(key, value, type, other = {}) {
     const { INTEGER, OBJECT, REQUIRED, STRING } = ValidationError.validationNames;
     let message;
     switch (type) {
@@ -22,7 +22,11 @@ class ValidationError extends ApplicationError {
         message = 'The provided data is wrong';
         break;
     }
-    super(`${key}:${value} breaks constraint: ${type}`, message, BAD_REQUEST, 'debug');
+    if (!key || !value) {
+      super(other.logMessage, message, BAD_REQUEST, other.logLevel || 'debug');
+    } else {
+      super(`${key}:${value} breaks constraint: ${type}`, message, BAD_REQUEST, 'debug');
+    }
   }
 }
 

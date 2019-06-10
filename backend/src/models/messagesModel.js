@@ -1,18 +1,35 @@
+const { FOREIGN_KEY_VIOLATION } = require('pg-error-constants');
 const { getClient } = require('../connections/db-client');
+const { ValidationError } = require('../errors');
 
 async function createMessage(sender, recipient, type, text = null) {
-  const { rows } = await getClient().query(
-    ` INSERT INTO messages (sender, recipient, type, text, created_at)
-      VALUES ($1, $2, $3, $4, NOW())
-      RETURNING id, created_at AS timestamp`,
-    [sender, recipient, type, text]
-  );
-  const { id, timestamp } = rows[0];
-  // TODO: throw custom error if sender/recipient doesn't exist
-  return {
-    id,
-    timestamp,
-  };
+  try {
+    const { rows } = await getClient().query(
+      ` INSERT INTO messages (sender, recipient, type, text, created_at)
+        VALUES ($1, $2, $3, $4, NOW())
+        RETURNING id, created_at AS timestamp`,
+      [sender, recipient, type, text]
+    );
+    const { id, timestamp } = rows[0];
+
+    return {
+      id,
+      timestamp,
+    };
+  } catch (e) {
+    switch (e.code) {
+      case FOREIGN_KEY_VIOLATION:
+        throw new ValidationError(null, null, null, {
+          logMessage: `Could not create message with sender: ${sender} and recipient ${recipient}: ${e.detail}`,
+          logLevel: 'info',
+        });
+      default:
+        throw new ValidationError(null, null, null, {
+          logMessage: `Could not create message with sender: ${sender} and recipient ${recipient}: ${e}`,
+          logLevel: 'error',
+        });
+    }
+  }
 }
 
 const buildMetadataInsert = (id, metadata) => {
@@ -35,7 +52,10 @@ const buildMetadataInsert = (id, metadata) => {
 async function createMetadata(id, metadata) {
   const [params, values] = buildMetadataInsert(id, metadata);
 
-  await getClient().query(`INSERT INTO metadata (message_id, name, value) VALUES${params}`, values);
+  return await getClient().query(
+    `INSERT INTO metadata (message_id, name, value) VALUES${params}`,
+    values
+  );
 }
 
 // TODO: Too complex, save metadata as json (maybe) or messages in ElasticSearch ?
@@ -66,8 +86,6 @@ async function getMessages(userId, recipient, start, limit) {
 
   const query = `${SELECT} ${FROM} ${GROUP_BY} ORDER BY created_at ASC`;
 
-  // TODO: Add try/catch and throw custom errors
-  // e.g. message type enum could be different
   const { rows } = await getClient().query(query, [userId, recipient, start, limit]);
 
   return rows;
