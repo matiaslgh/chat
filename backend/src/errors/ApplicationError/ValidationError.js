@@ -3,7 +3,7 @@ const ApplicationError = require('./index');
 
 class ValidationError extends ApplicationError {
   constructor(key, value, type) {
-    const { INTEGER, OBJECT, REQUIRED } = ValidationError.validationNames;
+    const { INTEGER, OBJECT, REQUIRED, STRING } = ValidationError.validationNames;
     let message;
     switch (type) {
       case INTEGER:
@@ -14,6 +14,9 @@ class ValidationError extends ApplicationError {
         break;
       case REQUIRED:
         message = `Field ${key} is required`;
+        break;
+      case STRING:
+        message = `Field ${key} must be an object`;
         break;
       default:
         message = 'The provided data is wrong';
@@ -27,6 +30,7 @@ ValidationError.validationNames = {
   INTEGER: 'integer',
   OBJECT: 'object',
   REQUIRED: 'required',
+  STRING: 'string',
 };
 
 module.exports = ValidationError;

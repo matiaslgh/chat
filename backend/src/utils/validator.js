@@ -18,6 +18,8 @@ const validateRequired = (obj, validations) => {
 const validators = {
   [validationNames.INTEGER]: value => Number.isInteger(value),
   [validationNames.OBJECT]: value => typeof value === 'object',
+  [validationNames.STRING]: value => typeof value === 'string',
+  // TODO: create url validator
 };
 
 /**

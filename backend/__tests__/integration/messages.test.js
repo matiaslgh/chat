@@ -71,6 +71,49 @@ describe('Messages endpoint', () => {
       });
   });
 
+  it('responds 400 with {message} when a required field is not sent', done => {
+    const app = require(`${src}/app`);
+
+    const data = {
+      sender: 1,
+      recipient: 2,
+    };
+
+    return request(app)
+      .post('/messages')
+      .set('Authorization', `Bearer ${token}`)
+      .send(data)
+      .then(res => {
+        expect(res.statusCode).toBe(400);
+        expect(res.body).toEqual({ message: 'Field content is required' });
+        done();
+      });
+  });
+
+  it('responds 400 with {message} when a video has an invalid source', done => {
+    const app = require(`${src}/app`);
+
+    const data = {
+      sender: 1,
+      recipient: 2,
+      content: {
+        type: 'video',
+        url: 'an url',
+        source: 'invalid-source',
+      },
+    };
+
+    return request(app)
+      .post('/messages')
+      .set('Authorization', `Bearer ${token}`)
+      .send(data)
+      .then(res => {
+        expect(res.statusCode).toBe(400);
+        expect(res.body).toEqual({ message: 'The provided data is wrong' });
+        done();
+      });
+  });
+
   it('Saves an image message and responds 200 with {id, timestamp}', done => {
     const app = require(`${src}/app`);
 
