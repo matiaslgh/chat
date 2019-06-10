@@ -58,13 +58,13 @@ async function getMessages(userId, recipient, start, limit) {
     WHERE ${isAMessageBetween('$1', '$2')} AND ${isNewerOrEqualThanMessage('$3')}
   `;
 
-  const filteredMessagesSQ = `SELECT * FROM messages ${filterMessagesWhere} LIMIT $4`;
+  const filteredMessagesSQ = `SELECT * FROM messages ${filterMessagesWhere} ORDER BY created_at DESC LIMIT $4`;
 
   const SELECT = `SELECT m1.id, m1.created_at AS timestamp, m1.sender, m1.recipient, ${createContent()}`;
   const FROM = `FROM (${filteredMessagesSQ}) AS m1 LEFT JOIN metadata m2 ON m1.id = m2.message_id`;
   const GROUP_BY = `GROUP BY m1.id, m1.created_at, m1.sender, m1.recipient, m1.text, m1.type`;
 
-  const query = `${SELECT} ${FROM} ${GROUP_BY}`;
+  const query = `${SELECT} ${FROM} ${GROUP_BY} ORDER BY created_at ASC`;
 
   // TODO: Add try/catch and throw custom errors
   // e.g. message type enum could be different
