@@ -44,15 +44,15 @@ async function createMessage(req, res) {
   const { sender, recipient, content } = body;
 
   try {
+    createMessageValidation({ sender, recipient, content });
+
     if (userId != sender) {
       throw new ForbiddenError(`User ${userId} tried to send a message as user ${sender}`);
     }
-    createMessageValidation({ sender, recipient, content });
-    // TODO: content could be undefined
+
     const { type, text, ...metadata } = content;
     const { id, timestamp } = await model.createMessage(sender, recipient, type, text);
 
-    // TODO: Create whitelist for valid metadata
     // TODO: Remove hard-coded 'text' this should be got from the db
     //       and cached to compare there
     if (metadata && type !== 'text') {
