@@ -66,6 +66,8 @@ async function getMessages(userId, recipient, start, limit) {
 
   const query = `${SELECT} ${FROM} ${GROUP_BY}`;
 
+  // TODO: Add try/catch and throw custom errors
+  // e.g. message type enum could be different
   const { rows } = await getClient().query(query, [userId, recipient, start, limit]);
 
   return rows;
