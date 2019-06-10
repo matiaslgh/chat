@@ -60,4 +60,8 @@ describe('Users controller', () => {
       done();
     });
   });
+
+  // TODO: test it calls validates with the correct params
+
+  // TODO: create integration tests
 });

@@ -60,4 +60,6 @@ describe('Errors', () => {
       });
     });
   });
+
+  // TODO: test custom errors like AuthError, ForbiddenError, and so on
 });

@@ -79,4 +79,6 @@ describe('POST /login', () => {
 
   // TODO: this test
   // it('responds 200 with id and the same token the user has if they are already logged in', done => {
+
+  // TODO: test it responds 400 if the sent data is not correct
 });

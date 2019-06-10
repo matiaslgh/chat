@@ -97,4 +97,6 @@ describe('Login controller', () => {
       done();
     });
   });
+
+  // TODO: test it calls validates with the correct params
 });
