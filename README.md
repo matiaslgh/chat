@@ -20,7 +20,7 @@ The following requirements are needed to run the project locally:
 
 ```shell
 git clone https://github.com/matiaslgh/chat.git chat-lgh
-cd chat
+cd chat-lgh
 ```
 
 ## Start in development mode
