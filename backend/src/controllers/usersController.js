@@ -3,11 +3,19 @@ const bcrypt = require('bcryptjs');
 const model = require('../models/usersModel');
 const log = require('../logger');
 const { handleCustomError } = require('../errors');
+const { validate } = require('../utils/validator');
 
 async function createUser(req, res) {
   const { username, password } = req.body;
 
   try {
+    validate(
+      { username, password },
+      {
+        username: ['required', 'string'], // TODO: Validate username (min/max length, not null, etc)
+        password: ['required', 'string'], // TODO: Validate password requirements (length, not null, must contain X char, etc)
+      }
+    );
     const hashedPassword = await bcrypt.hash(password, 10);
     const id = await model.createUser(username, hashedPassword);
 
