@@ -16,6 +16,13 @@ The following requirements are needed to run the project locally:
 - [Docker](https://www.docker.com/products/docker-desktop)
 - [Docker Sync](http://docker-sync.io/) (Only for development)
 
+## Before beginning
+
+```shell
+git clone http:....
+cd chat
+```
+
 ## Start in development mode
 
 ```shell
