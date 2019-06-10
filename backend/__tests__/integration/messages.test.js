@@ -61,8 +61,12 @@ describe('Messages endpoint', () => {
 
         const params = query.mock.calls[0];
         expect(cleanQuery(params[0])).toEqual(INSERT_QUERY);
-        const TEXT_TYPE = 1;
-        expect(params[1]).toEqual([data.sender, data.recipient, TEXT_TYPE, data.content.text]);
+        expect(params[1]).toEqual([
+          data.sender,
+          data.recipient,
+          data.content.type,
+          data.content.text,
+        ]);
         done();
       });
   });
@@ -101,8 +105,7 @@ describe('Messages endpoint', () => {
 
         const params1 = query.mock.calls[0];
         expect(cleanQuery(params1[0])).toEqual(INSERT_QUERY);
-        const IMAGE_TYPE = 2;
-        expect(params1[1]).toEqual([data.sender, data.recipient, IMAGE_TYPE, null]);
+        expect(params1[1]).toEqual([data.sender, data.recipient, data.content.type, null]);
 
         const params2 = query.mock.calls[1];
         expect(cleanQuery(params2[0])).toEqual(
@@ -128,4 +131,7 @@ describe('Messages endpoint', () => {
 
   // TODO: this test
   // it('Responds with 401 if the sender field is not the logged user', done => {});
+
+  // TODO: test getMessages with a normal conversation with images/videos/text
+  // TODO: test send wrong data to getMessages
 });
