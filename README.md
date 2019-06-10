@@ -19,7 +19,7 @@ The following requirements are needed to run the project locally:
 ## Before beginning
 
 ```shell
-git clone http:....
+git clone https://github.com/matiaslgh/chat.git chat-lgh
 cd chat
 ```
 
