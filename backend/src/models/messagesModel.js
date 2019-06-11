@@ -71,12 +71,7 @@ async function getMessages(userId, recipient, start, limit) {
   const isAMessageBetween = (user1, user2) =>
     `((sender = ${user1} AND recipient = ${user2}) OR (sender = ${user2} AND recipient = ${user1}))`;
 
-  const isNewerOrEqualThanMessage = messageId =>
-    `created_at >= (SELECT created_at FROM messages WHERE id = ${messageId})`;
-
-  const filterMessagesWhere = `
-    WHERE ${isAMessageBetween('$1', '$2')} AND ${isNewerOrEqualThanMessage('$3')}
-  `;
+  const filterMessagesWhere = `WHERE ${isAMessageBetween('$1', '$2')} AND id >= $3`;
 
   const filteredMessagesSQ = `SELECT * FROM messages ${filterMessagesWhere} ORDER BY created_at DESC LIMIT $4`;
 
