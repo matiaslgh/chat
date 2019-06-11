@@ -1,33 +1,33 @@
-import { Component } from "react";
-import Link from "next/link";
-import fetch from "isomorphic-unfetch";
+import { Component } from 'react';
+import Link from 'next/link';
+import fetch from 'isomorphic-unfetch';
 
 class ChatOne extends Component {
   // fetch old messages data from the server
   static async getInitialProps({ req }) {
-    const response = await fetch("http://localhost:3000/messages/chat1");
+    const response = await fetch('http://localhost:3000/messages/chat1');
     const messages = await response.json();
     return { messages };
   }
 
   static defaultProps = {
-    messages: []
+    messages: [],
   };
 
   // init state with the prefetched messages
   state = {
-    field: "",
+    field: '',
     newMessage: 0,
     messages: this.props.messages,
     subscribe: false,
-    subscribed: false
+    subscribed: false,
   };
 
   subscribe = () => {
     if (this.state.subscribe && !this.state.subscribed) {
       // connect to WS server and listen event
-      this.props.socket.on("message.chat1", this.handleMessage);
-      this.props.socket.on("message.chat2", this.handleOtherMessage);
+      this.props.socket.on('message.chat1', this.handleMessage);
+      this.props.socket.on('message.chat2', this.handleOtherMessage);
       this.setState({ subscribed: true });
     }
   };
@@ -46,8 +46,8 @@ class ChatOne extends Component {
 
   // close socket connection
   componentWillUnmount() {
-    this.props.socket.off("message.chat1", this.handleMessage);
-    this.props.socket.off("message.chat2", this.handleOtherMessage);
+    this.props.socket.off('message.chat1', this.handleMessage);
+    this.props.socket.off('message.chat2', this.handleOtherMessage);
   }
 
   // add messages from server to the state
@@ -70,16 +70,16 @@ class ChatOne extends Component {
     // create message object
     const message = {
       id: new Date().getTime(),
-      value: this.state.field
+      value: this.state.field,
     };
 
     // send object to WS server
-    this.props.socket.emit("message.chat1", message);
+    this.props.socket.emit('message.chat1', message);
 
     // add it to state and clean current input value
     this.setState(state => ({
-      field: "",
-      messages: state.messages.concat(message)
+      field: '',
+      messages: state.messages.concat(message),
     }));
   };
 
@@ -87,15 +87,13 @@ class ChatOne extends Component {
     return (
       <main>
         <div>
-          <Link href={"/"}>
-            <a>{"Chat One"}</a>
+          <Link href={'/'}>
+            <a>{'Chat One'}</a>
           </Link>
           <br />
-          <Link href={"/clone"}>
+          <Link href={'/clone'}>
             <a>{`Chat Two ${
-              this.state.newMessage > 0
-                ? `( ${this.state.newMessage} new message )`
-                : ""
+              this.state.newMessage > 0 ? `( ${this.state.newMessage} new message )` : ''
             }`}</a>
           </Link>
           <ul>

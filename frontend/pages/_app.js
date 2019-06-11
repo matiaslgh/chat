@@ -1,6 +1,6 @@
-import App, { Container } from "next/app";
-import React from "react";
-import io from "socket.io-client";
+import App, { Container } from 'next/app';
+import React from 'react';
+import io from 'socket.io-client';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -13,7 +13,7 @@ class MyApp extends App {
     return { pageProps };
   }
   state = {
-    socket: null
+    socket: null,
   };
   componentDidMount() {
     // connect to WS server and listen event
