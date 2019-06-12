@@ -5,10 +5,10 @@ export const getMessages = (currentUser, otherUser) => {
   console.log('otherUser :', otherUser);
   return [
     {
-      id: 0,
+      id: 1,
       timestamp: '2018-07-07T02:59:21Z',
-      sender: 0,
-      recipient: 0,
+      sender: 1,
+      recipient: 2,
       content: {
         type: 'text',
         text: 'Helloooo!',
