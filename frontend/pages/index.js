@@ -25,7 +25,7 @@ const Chat = () => {
     <main>
       <div>
         <MessageListContainer messages={messages} addNewMessage={addNewMessage} recipient={2} />
-        <MessageFieldContainer messages={messages} addNewMessage={addNewMessage} recipient={2} />
+        <MessageFieldContainer addNewMessage={addNewMessage} recipient={2} />
       </div>
     </main>
   );

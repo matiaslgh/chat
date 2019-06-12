@@ -4,7 +4,7 @@ import Message from './Message';
 const MessageList = ({ messages }) => (
   <ul>
     {messages.map(message => (
-      <Message key={message.id} message={message} />
+      <Message key={message.id || message.renderId} message={message} />
     ))}
   </ul>
 );

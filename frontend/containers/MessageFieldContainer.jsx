@@ -5,7 +5,7 @@ import MessageField from '../components/MessageField';
 import SocketContext from '../context/SocketContext';
 import CurrentUserContext from '../context/CurrentUserContext';
 
-const MessageFieldContainer = ({ messages, addNewMessage, recipient }) => {
+const MessageFieldContainer = ({ addNewMessage, recipient }) => {
   const [value, setValue] = useState('');
   const socket = useContext(SocketContext);
   const currentUserId = useContext(CurrentUserContext);
@@ -14,8 +14,9 @@ const MessageFieldContainer = ({ messages, addNewMessage, recipient }) => {
     e.preventDefault();
 
     const message = {
+      renderId: new Date().getTime(),
       sender: currentUserId,
-      recipient: 2,
+      recipient,
       content: {
         type: 'text', // TODO: This should not be hard-coded
         text: value,
