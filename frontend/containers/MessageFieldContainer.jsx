@@ -3,17 +3,23 @@ import React, { useState, useContext } from 'react';
 import { emitMessage } from '../network/socket';
 import MessageField from '../components/MessageField';
 import SocketContext from '../context/SocketContext';
+import CurrentUserContext from '../context/CurrentUserContext';
 
 const MessageFieldContainer = ({ messages, addNewMessage, recipient }) => {
   const [value, setValue] = useState('');
   const socket = useContext(SocketContext);
+  const currentUserId = useContext(CurrentUserContext);
 
   const handleSubmit = e => {
     e.preventDefault();
 
     const message = {
-      id: new Date().getTime(),
-      value,
+      sender: currentUserId,
+      recipient: 2,
+      content: {
+        type: 'text', // TODO: This should not be hard-coded
+        text: value,
+      },
     };
 
     emitMessage(socket, message);

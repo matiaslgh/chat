@@ -2,6 +2,7 @@ import App, { Container } from 'next/app';
 import React from 'react';
 import { connect } from '../network/socket';
 import SocketContext from '../context/SocketContext';
+import CurrentUserContext from '../context/CurrentUserContext';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -34,7 +35,9 @@ class MyApp extends App {
     return (
       <Container>
         <SocketContext.Provider value={this.state.socket}>
-          <Component {...pageProps} />
+          <CurrentUserContext value={1}>
+            <Component {...pageProps} />
+          </CurrentUserContext>
         </SocketContext.Provider>
       </Container>
     );
