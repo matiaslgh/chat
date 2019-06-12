@@ -35,9 +35,9 @@ class MyApp extends App {
     return (
       <Container>
         <SocketContext.Provider value={this.state.socket}>
-          <CurrentUserContext value={1}>
+          <CurrentUserContext.Provider value={1}>
             <Component {...pageProps} />
-          </CurrentUserContext>
+          </CurrentUserContext.Provider>
         </SocketContext.Provider>
       </Container>
     );
