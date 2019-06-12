@@ -17,6 +17,10 @@ class MyApp extends App {
 
   state = {
     socket: null,
+    currentUser: {
+      id: 1,
+      token: 'valid-token',
+    },
   };
 
   componentDidMount() {
@@ -32,10 +36,15 @@ class MyApp extends App {
 
   render() {
     const { Component, pageProps } = this.props;
+    const setCurrentUser = currentUser => this.setState({ currentUser });
+    const contextValue = {
+      ...this.state.currentUser,
+      setCurrentUser,
+    };
     return (
       <Container>
         <SocketContext.Provider value={this.state.socket}>
-          <CurrentUserContext.Provider value={1}>
+          <CurrentUserContext.Provider value={contextValue}>
             <Component {...pageProps} />
           </CurrentUserContext.Provider>
         </SocketContext.Provider>

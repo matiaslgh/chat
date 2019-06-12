@@ -16,3 +16,9 @@ export const getMessages = (currentUser, otherUser) => {
     },
   ];
 };
+
+export const login = (username, password) => {
+  console.log('username :', username);
+  console.log('password :', password);
+  return { token: 'valid-token', id: 1 };
+};

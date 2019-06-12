@@ -13,7 +13,7 @@ const Chat = () => {
     conversationsActions,
     dispatch
   );
-  const currentUserId = useContext(CurrentUserContext);
+  const { id: currentUserId } = useContext(CurrentUserContext);
 
   useEffect(() => {
     addConversation(currentUserId, 2);

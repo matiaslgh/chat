@@ -8,7 +8,7 @@ import CurrentUserContext from '../context/CurrentUserContext';
 const MessageFieldContainer = ({ addNewMessage, recipient }) => {
   const [value, setValue] = useState('');
   const socket = useContext(SocketContext);
-  const currentUserId = useContext(CurrentUserContext);
+  const { id: currentUserId } = useContext(CurrentUserContext);
 
   const handleSubmit = e => {
     e.preventDefault();
