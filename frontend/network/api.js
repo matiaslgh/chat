@@ -1,24 +1,23 @@
-// import fetch from 'isomorphic-unfetch';
+import fetch from 'isomorphic-unfetch';
 
-export const getMessages = (currentUser, otherUser) => {
-  console.log('currentUser :', currentUser);
-  console.log('otherUser :', otherUser);
-  return [
-    {
-      id: 1,
-      timestamp: '2018-07-07T02:59:21Z',
-      sender: 1,
-      recipient: 2,
-      content: {
-        type: 'text',
-        text: 'Helloooo!',
-      },
+export const getMessages = async (token, recipient, start = 0, limit = 100) => {
+  const query = `recipient=${recipient}&start=${start}&limit=${limit}`;
+  const res = await fetch(`${process.env.API_URL}/messages?${query}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
-  ];
+  });
+  return res.json();
 };
 
-export const login = (username, password) => {
-  console.log('username :', username);
-  console.log('password :', password);
-  return { token: 'valid-token', id: 1 };
+export const login = async (username, password) => {
+  const res = await fetch(`${process.env.API_URL}/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username, password }),
+  });
+  return res.json();
 };

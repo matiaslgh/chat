@@ -6,7 +6,7 @@ import cookie from 'js-cookie';
  * Creates a cookie with the token + redirect to the app itself
  * @param {Object} obj with token
  */
-export const login = async ({ token }) => {
+export const setCookieAndRedirect = async ({ token }) => {
   // TODO: Use only one source of truth for expiration (it must match with the server)
   cookie.set('token', token, { expires: 1 }); // 1 day
   Router.push('/');

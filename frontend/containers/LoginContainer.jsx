@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import Router from 'next/router';
 import { login } from '../network/api';
+import { setCookieAndRedirect } from '../utils/auth';
 import Login from '../components/Login';
 
 import CurrentUserContext from '../context/CurrentUserContext';
@@ -11,7 +11,7 @@ const LoginContainer = () => {
   const onSubmit = async (username, password) => {
     const { token, id } = await login(username, password);
     setCurrentUser({ token, id });
-    Router.push('/');
+    setCookieAndRedirect({ token });
     // TODO: Use try/catch and handle errors
   };
 
