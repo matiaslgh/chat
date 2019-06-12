@@ -1,7 +1,7 @@
 import App, { Container } from 'next/app';
 import React from 'react';
 import { connect } from '../network/socket';
-import SocketContext from '../SocketContext';
+import SocketContext from '../context/SocketContext';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {

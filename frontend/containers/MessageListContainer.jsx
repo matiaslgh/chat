@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { onReceiveMessage } from '../network/socket';
-import SocketContext from '../SocketContext';
+import SocketContext from '../context/SocketContext';
 import MessageList from '../components/MessageList';
 
 const MessageListContainer = ({ messages, addNewMessage, recipient }) => {

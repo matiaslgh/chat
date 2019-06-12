@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 // import PropTypes from 'prop-types';
 import { emitMessage } from '../network/socket';
 import MessageField from '../components/MessageField';
-import SocketContext from '../SocketContext';
+import SocketContext from '../context/SocketContext';
 
 const MessageFieldContainer = ({ messages, addNewMessage, recipient }) => {
   const [value, setValue] = useState('');
