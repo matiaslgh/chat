@@ -31,8 +31,4 @@ const Chat = () => {
   );
 };
 
-Chat.defaultProps = {
-  messages: [],
-};
-
 export default Chat;
