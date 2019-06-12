@@ -3,12 +3,12 @@ import { onReceiveMessage } from '../network/socket';
 import SocketContext from '../SocketContext';
 import MessageList from '../components/MessageList';
 
-const MessageListContainer = ({ messages, setMessages }) => {
+const MessageListContainer = ({ messages, addNewMessage, recipient }) => {
   const [subscribed, setSubscribed] = useState(false);
   const socket = useContext(SocketContext);
 
   const handleMessage = message => {
-    setMessages(messages.concat(message));
+    addNewMessage(recipient, message);
   };
 
   const subscribe = () => {

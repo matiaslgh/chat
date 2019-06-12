@@ -4,7 +4,7 @@ import { emitMessage } from '../network/socket';
 import MessageField from '../components/MessageField';
 import SocketContext from '../SocketContext';
 
-const MessageFieldContainer = ({ messages, setMessages }) => {
+const MessageFieldContainer = ({ messages, addNewMessage, recipient }) => {
   const [value, setValue] = useState('');
   const socket = useContext(SocketContext);
 
@@ -19,7 +19,7 @@ const MessageFieldContainer = ({ messages, setMessages }) => {
     emitMessage(socket, message);
 
     setValue('');
-    setMessages(messages.concat(message));
+    addNewMessage(recipient, message);
   };
 
   return (
