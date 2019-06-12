@@ -1,6 +1,7 @@
 import App, { Container } from 'next/app';
 import React from 'react';
-import io from 'socket.io-client';
+import { connect } from '../network/socket';
+import SocketContext from '../SocketContext';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -12,12 +13,14 @@ class MyApp extends App {
 
     return { pageProps };
   }
+
   state = {
     socket: null,
   };
+
   componentDidMount() {
     // connect to WS server and listen event
-    const socket = io();
+    const socket = connect();
     this.setState({ socket });
   }
 
@@ -30,7 +33,9 @@ class MyApp extends App {
     const { Component, pageProps } = this.props;
     return (
       <Container>
-        <Component {...pageProps} socket={this.state.socket} />
+        <SocketContext.Provider value={this.state.socket}>
+          <Component {...pageProps} />
+        </SocketContext.Provider>
       </Container>
     );
   }
