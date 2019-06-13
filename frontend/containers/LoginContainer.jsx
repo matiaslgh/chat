@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
+import Router from 'next/router';
 import { login } from '../network/api';
-import { setCookieAndRedirect } from '../utils/auth';
+import { setCookies } from '../utils/browser';
 import Login from '../components/Login';
 
 import CurrentUserContext from '../context/CurrentUserContext';
@@ -11,8 +12,9 @@ const LoginContainer = () => {
   const onSubmit = async (username, password) => {
     try {
       const { token, id } = await login(username, password);
+      setCookies({ token, userId: id });
       setCurrentUser({ token, id });
-      setCookieAndRedirect({ token, userId: id });
+      Router.push('/');
     } catch (e) {
       // TODO: handle error
       console.log('e :', e);

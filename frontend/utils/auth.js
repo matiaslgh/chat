@@ -3,19 +3,6 @@ import nextCookie from 'next-cookies';
 import cookie from 'js-cookie';
 
 /**
- * Creates a cookie with the token + redirect to the app itself
- * @param {Object} obj with token
- */
-export const setCookieAndRedirect = async ({ token, userId }) => {
-  // TODO: Use only one source of truth for expiration (it must match with the server)
-  const expiration = { expires: 1 }; // 1 day
-  cookie.set('token', token, expiration);
-  cookie.set('userId', userId, expiration);
-  Router.push('/');
-  // TODO: if /login had a query, redirect to specific conversation
-};
-
-/**
  * Remove the token from the cookie + Redirect to /login + TODO: logs out from server too
  */
 export const logout = () => {

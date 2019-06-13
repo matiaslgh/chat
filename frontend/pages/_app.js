@@ -28,11 +28,17 @@ class MyApp extends App {
 
   componentDidMount() {
     // connect to WS server and listen event
-    const { currentUser } = this.state;
+    const { currentUser, socket } = this.state;
 
-    if (currentUser.id && currentUser.token) {
-      const socket = connect();
-      this.setState({ socket });
+    const isLoggedIn = currentUser.id && currentUser.token;
+
+    if (isLoggedIn && !socket) {
+      this.setState({ socket: connect() });
+    }
+
+    if (!isLoggedIn && socket) {
+      socket.close();
+      this.setState({ socket: null });
     }
   }
 

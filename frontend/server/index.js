@@ -19,10 +19,15 @@ io.on('connection', socket => {
   const { userId, token } = cookie.parse(socket.handshake.headers.cookie);
 
   // TODO: Check in redis if that info is valid.. if not, force disconnection
+  if (!userId || !token) {
+    return;
+  }
+
   socket.join(userId);
   redisClient.subscribe(userId);
 
   socket.on('disconnect', () => {
+    console.log('disconnect');
     // TODO: redis unsubscribe if there are not more connections for the same user
   });
 });
