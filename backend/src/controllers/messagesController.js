@@ -1,4 +1,5 @@
 const { OK } = require('http-status-codes');
+const redis = require('../connections/redis-client');
 const model = require('../models/messagesModel');
 const log = require('../logger');
 const { handleCustomError, ForbiddenError } = require('../errors');
@@ -58,6 +59,11 @@ async function createMessage(req, res) {
     if (metadata && type !== 'text') {
       await model.createMetadata(id, metadata);
     }
+
+    // TODO: build this image in a better way (e.g. text could not exist)
+    const message = { id, timestamp, sender, recipient, content: { type, text, ...metadata } };
+    // TODO: Check if user is logged in
+    redis.publish(recipient, JSON.stringify(message));
 
     log.trace(`${sender} sent message ${id} to ${recipient}`);
     res.status(OK).json({
