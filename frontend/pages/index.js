@@ -1,42 +1,33 @@
 import React from 'react';
-import useAsyncReducer from '../hooks/useAsyncReducer';
-import attachDispatchToActions from '../utils/attachDispatchToActions';
+import PropTypes from 'prop-types';
+import { getUsers } from '../network/api';
 import { auth } from '../utils/auth';
-import { getMessages } from '../network/api';
-import conversationsReducer from '../reducers/conversationsReducer';
-import conversationsActions from '../actions/conversationsActions';
-import MessageFieldContainer from '../containers/MessageFieldContainer';
-import MessageListContainer from '../containers/MessageListContainer';
+import userType from '../types/userType';
+import Layout from '../components/Layout';
+import UserListContainer from '../containers/UserListContainer';
+import Welcome from '../components/Welcome';
 
-const Chat = ({ initialConversations }) => {
-  const [conversations, dispatch] = useAsyncReducer(conversationsReducer, initialConversations);
-  const { addNewMessage } = attachDispatchToActions(conversationsActions, dispatch);
+const WelcomePage = ({ users }) => (
+  <Layout>
+    <UserListContainer users={users} />
+    <Welcome />
+  </Layout>
+);
 
-  const messages = conversations[2] || [];
-
-  return (
-    <main>
-      <div>
-        <MessageListContainer messages={messages} addNewMessage={addNewMessage} recipient={2} />
-        <MessageFieldContainer addNewMessage={addNewMessage} recipient={2} />
-      </div>
-    </main>
-  );
-};
-
-Chat.getInitialProps = async ctx => {
+WelcomePage.getInitialProps = async ctx => {
   const token = auth(ctx);
-  // TODO: handle errors
-  const { messages } = await getMessages(token, 2, 0);
-  return {
-    initialConversations: {
-      2: messages,
-    },
-  };
+
+  try {
+    const users = await getUsers(token);
+    return { users };
+  } catch (e) {
+    // TODO: show error message (something global)
+    return {};
+  }
 };
 
-Chat.defaultProps = {
-  initialConversations: {},
+WelcomePage.propTypes = {
+  users: PropTypes.arrayOf(userType).isRequired,
 };
 
-export default Chat;
+export default WelcomePage;

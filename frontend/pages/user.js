@@ -35,6 +35,8 @@ const Chat = ({ users, messages, recipient }) => {
 };
 
 Chat.getInitialProps = async ctx => {
+  const token = auth(ctx);
+
   const { query } = ctx;
   const recipient = parseInt(query.id, 10);
 
@@ -43,7 +45,6 @@ Chat.getInitialProps = async ctx => {
   }
 
   try {
-    const token = auth(ctx);
     const [users, { messages }] = await Promise.all([
       getUsers(token),
       getMessages(token, recipient),
