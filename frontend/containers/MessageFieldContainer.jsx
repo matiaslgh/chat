@@ -1,14 +1,11 @@
 import React, { useState, useContext } from 'react';
-// import PropTypes from 'prop-types';
-import { emitMessage } from '../network/socket';
 import MessageField from '../components/MessageField';
-import SocketContext from '../context/SocketContext';
 import CurrentUserContext from '../context/CurrentUserContext';
+import { sendMessage } from '../network/api';
 
 const MessageFieldContainer = ({ addNewMessage, recipient }) => {
   const [value, setValue] = useState('');
-  const socket = useContext(SocketContext);
-  const { id: currentUserId } = useContext(CurrentUserContext);
+  const { id: currentUserId, token } = useContext(CurrentUserContext);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -23,7 +20,7 @@ const MessageFieldContainer = ({ addNewMessage, recipient }) => {
       },
     };
 
-    emitMessage(socket, message);
+    sendMessage(token, message);
 
     setValue('');
     addNewMessage(recipient, message);

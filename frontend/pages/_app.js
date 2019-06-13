@@ -28,22 +28,36 @@ class MyApp extends App {
 
   componentDidMount() {
     // connect to WS server and listen event
-    const socket = connect();
-    this.setState({ socket });
+    const { currentUser } = this.state;
+
+    if (currentUser.id && currentUser.token) {
+      const socket = connect();
+      this.setState({ socket });
+    }
   }
 
-  // close socket connection
   componentWillUnmount() {
-    this.state.socket.close();
+    const { socket } = this.state;
+    if (socket) {
+      socket.close();
+    }
   }
+
+  setCurrentUser = currentUser => {
+    this.setState(old => ({
+      socket: old.socket ? old.socket : connect(),
+      currentUser: {
+        ...currentUser,
+        setCurrentUser: this.setCurrentUser,
+      },
+    }));
+  };
 
   render() {
     const { Component, pageProps } = this.props;
-    const setCurrentUser = currentUser =>
-      this.setState({ currentUser: { ...currentUser, setCurrentUser } });
     const contextValue = {
       ...this.state.currentUser,
-      setCurrentUser,
+      setCurrentUser: this.setCurrentUser,
     };
     return (
       <Container>
