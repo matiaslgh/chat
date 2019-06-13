@@ -3,25 +3,28 @@ import React from 'react';
 import { connect } from '../network/socket';
 import SocketContext from '../context/SocketContext';
 import CurrentUserContext from '../context/CurrentUserContext';
+import { getCurrentUser } from '../utils/auth';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
     let pageProps = {};
 
+    const currentUser = getCurrentUser(ctx);
+
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx);
     }
 
-    return { pageProps };
+    return { pageProps, currentUser };
   }
 
-  state = {
-    socket: null,
-    currentUser: {
-      id: 1,
-      token: 'valid-token',
-    },
-  };
+  constructor({ currentUser }) {
+    super();
+    this.state = {
+      socket: null,
+      currentUser: currentUser || {},
+    };
+  }
 
   componentDidMount() {
     // connect to WS server and listen event
@@ -36,7 +39,8 @@ class MyApp extends App {
 
   render() {
     const { Component, pageProps } = this.props;
-    const setCurrentUser = currentUser => this.setState({ currentUser });
+    const setCurrentUser = currentUser =>
+      this.setState({ currentUser: { ...currentUser, setCurrentUser } });
     const contextValue = {
       ...this.state.currentUser,
       setCurrentUser,
