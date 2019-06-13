@@ -6,9 +6,11 @@ import cookie from 'js-cookie';
  * Creates a cookie with the token + redirect to the app itself
  * @param {Object} obj with token
  */
-export const setCookieAndRedirect = async ({ token }) => {
+export const setCookieAndRedirect = async ({ token, userId }) => {
   // TODO: Use only one source of truth for expiration (it must match with the server)
-  cookie.set('token', token, { expires: 1 }); // 1 day
+  const expiration = { expires: 1 }; // 1 day
+  cookie.set('token', token, expiration);
+  cookie.set('userId', userId, expiration);
   Router.push('/');
   // TODO: if /login had a query, redirect to specific conversation
 };
@@ -43,4 +45,17 @@ export const auth = ctx => {
   }
 
   return token;
+};
+
+/**
+ * Extract current user data from cookies
+ * either the context is in the server or the browser
+ * @param {Object} ctx Context could be server or browser
+ */
+export const getCurrentUser = ctx => {
+  const { token, userId } = nextCookie(ctx);
+  if (!token || !userId) {
+    return null;
+  }
+  return { token, id: userId };
 };
