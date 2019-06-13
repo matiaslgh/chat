@@ -8,4 +8,5 @@ module.exports = {
     port: process.env.POSTGRES_PORT,
   },
   jwtSecret: process.env.JWT_SECRET,
+  redisUrl: process.env.REDIS_URL,
 };
