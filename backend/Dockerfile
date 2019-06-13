@@ -2,9 +2,6 @@ FROM node:10.16.0-alpine
 
 WORKDIR /app
 
-# Override the base log level (info)
-ENV NPM_CONFIG_LOGLEVEL warn
-
 # Install `forever`
 RUN npm install -g forever
 
