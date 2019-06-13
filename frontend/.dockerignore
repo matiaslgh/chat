@@ -1,0 +1,10 @@
+__tests__
+.next
+node_modules
+.eslintrc.yml
+.prettierrc.yml
+Dockerfile
+Dockerfile-dev
+npm-debug.log
+nodemon.json
+.vscode
