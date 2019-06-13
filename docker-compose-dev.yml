@@ -9,9 +9,23 @@ services:
       - chat-lgh-backend-sync:/app:nocopy
     env_file:
      - ./backend/src/env/development.env
+  # frontend:
+  #   container_name: chat-lgh-frontend-dev
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile-dev
+  #   volumes:
+  #     - chat-lgh-frontend-sync:/app:nocopy
+  #   env_file:
+  #     - ./frontend/server/env/development.env
+  redis:
+    ports:
+    - '6379:6379'
   postgres:
     env_file:
      - ./backend/src/env/development.env
 volumes:
   chat-lgh-backend-sync:
     external: true
+  # chat-lgh-frontend-sync:
+  #   external: true

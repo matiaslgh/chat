@@ -5,10 +5,25 @@ services:
     container_name: chat-lgh-backend-prod
     depends_on:
       - postgres
+      - redis
     ports:
       - 3000:3000
     env_file:
      - ./backend/src/env/production.env
+  # frontend:
+  #   build: ./frontend
+  #   container_name: chat-lgh-frontend-prod
+  #   depends_on:
+  #     - backend
+  #     - redis
+  #   env_file:
+  #     - ./frontend/server/env/production.env
+  #   ports:
+  #     - 3001:3001
+  redis:
+    image: redis:alpine
+    expose:
+      - 6379
   postgres:
     build: ./postgres
     env_file:

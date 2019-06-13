@@ -5,3 +5,5 @@ options:
 syncs:
   chat-lgh-backend-sync:
     src: './backend/'
+  # chat-lgh-frontend-sync:
+  #   src: './frontend/'
