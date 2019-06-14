@@ -11,6 +11,7 @@ import conversationsActions from '../actions/conversationsActions';
 import MessageFieldContainer from '../containers/MessageFieldContainer';
 import MessageListContainer from '../containers/MessageListContainer';
 import UserListContainer from '../containers/UserListContainer';
+import Layout from '../components/Layout';
 
 const Chat = ({ users, messages, recipient }) => {
   const initialConvs = { [recipient]: messages };
@@ -20,17 +21,15 @@ const Chat = ({ users, messages, recipient }) => {
   const stateMessages = conversations[recipient];
 
   return (
-    <main>
-      <div>
-        <UserListContainer users={users} recipient={recipient} conversations={conversations} />
-        <MessageListContainer
-          messages={stateMessages}
-          addNewMessage={addNewMessage}
-          recipient={recipient}
-        />
-        <MessageFieldContainer addNewMessage={addNewMessage} recipient={recipient} />
-      </div>
-    </main>
+    <Layout>
+      <UserListContainer users={users} recipient={recipient} conversations={conversations} />
+      <MessageListContainer
+        messages={stateMessages}
+        addNewMessage={addNewMessage}
+        recipient={recipient}
+      />
+      <MessageFieldContainer addNewMessage={addNewMessage} recipient={recipient} />
+    </Layout>
   );
 };
 

@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from '../network/socket';
 import SocketContext from '../context/SocketContext';
 import CurrentUserContext from '../context/CurrentUserContext';
-import { getCurrentUser } from '../utils/auth';
+import { getCurrentUser, logout } from '../utils/auth';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -59,11 +59,24 @@ class MyApp extends App {
     }));
   };
 
+  doLogout = () => {
+    const { socket } = this.state;
+    if (socket) {
+      socket.close();
+    }
+    logout();
+    this.setState({
+      socket: null,
+      currentUser: {},
+    });
+  };
+
   render() {
     const { Component, pageProps } = this.props;
     const contextValue = {
       ...this.state.currentUser,
       setCurrentUser: this.setCurrentUser,
+      logout: this.doLogout,
     };
     return (
       <Container>

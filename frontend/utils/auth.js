@@ -7,6 +7,7 @@ import cookie from 'js-cookie';
  */
 export const logout = () => {
   cookie.remove('token');
+  cookie.remove('userId');
   Router.push('/login');
   // TODO: make call to logout in server
 };
