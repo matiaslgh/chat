@@ -1,4 +1,4 @@
-const { CREATED } = require('http-status-codes');
+const { CREATED, OK } = require('http-status-codes');
 const bcrypt = require('bcryptjs');
 const model = require('../models/usersModel');
 const log = require('../logger');
@@ -33,6 +33,26 @@ async function createUser(req, res) {
   }
 }
 
+// TODO: Eventually, it should return only the currentUser's friends
+async function getUsers(req, res) {
+  try {
+    const users = await model.getUsers();
+    // TODO: Check if is online in redis and remove the line below
+    const usersWithOnlineField = users.map(user =>
+      Math.random() > 0.5 ? { ...user, isOnline: false } : { ...user, isOnline: true }
+    );
+    return res.status(OK).json(usersWithOnlineField);
+  } catch (e) {
+    handleCustomError({
+      error: e,
+      response: res,
+      defaultLogMsg: `Error trying to get users: ${e}`,
+      defaultResponseMsg: 'Internal Server Error: Could not get users',
+    });
+  }
+}
+
 module.exports = {
   createUser,
+  getUsers,
 };

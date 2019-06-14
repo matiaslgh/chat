@@ -36,7 +36,20 @@ async function createUser(username, password) {
   }
 }
 
+async function getUsers() {
+  try {
+    const { rows } = await getClient().query(` SELECT id, username FROM ${table}`);
+    return rows;
+  } catch (e) {
+    switch (e.code) {
+      default:
+        throw e;
+    }
+  }
+}
+
 module.exports = {
   getPassAndIdFromUsername,
   createUser,
+  getUsers,
 };

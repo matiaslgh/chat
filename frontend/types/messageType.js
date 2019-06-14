@@ -19,8 +19,8 @@ const videoType = PropTypes.shape({
 });
 
 export default PropTypes.shape({
-  id: PropTypes.number.isRequired,
-  sender: PropTypes.number.isRequired,
-  recipient: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
+  sender: PropTypes.string.isRequired,
+  recipient: PropTypes.string.isRequired,
   content: PropTypes.oneOfType([textType, imageType, videoType]).isRequired,
 });

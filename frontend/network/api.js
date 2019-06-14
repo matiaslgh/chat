@@ -34,8 +34,12 @@ export const login = async (username, password) => {
   return res.json();
 };
 
-export const getUsers = token => [
-  { id: 1, username: 'test1', isOnline: true },
-  { id: 2, username: 'test2', isOnline: true },
-  { id: 3, username: 'test3', isOnline: false },
-];
+export const getUsers = async token => {
+  const res = await fetch(`${process.env.API_URL}/users`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.json();
+};
